@@ -128,7 +128,13 @@ enum blink_state {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    UITapGestureRecognizer * tap2fGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(click2f:)];
+    tap2fGestureRecognizer.numberOfTouchesRequired = 2;
+    [_textView addGestureRecognizer:tap2fGestureRecognizer];
+    [tap2fGestureRecognizer release];
+    
     UITapGestureRecognizer * tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(click:)];
+    tapGestureRecognizer.numberOfTouchesRequired = 1;
     [_textView addGestureRecognizer:tapGestureRecognizer];
     [tapGestureRecognizer release];
 
@@ -197,6 +203,13 @@ enum blink_state {
     [self becomeFirstResponder];
     CGPoint clickLocation = [sender locationInView:sender.view];
     gui_send_mouse_event(MOUSE_LEFT, clickLocation.x, clickLocation.y, 1, 0);
+}
+
+- (void)click2f:(UITapGestureRecognizer *)sender {
+    [self becomeFirstResponder];
+    // send ESC
+    char escapeString[] = {ESC, 0};
+    [self insertText:[NSString stringWithUTF8String:escapeString]];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)sender {
